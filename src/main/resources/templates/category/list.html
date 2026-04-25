@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+//Nama : Suardin Gea
+//Nim   : 2481006
+//Mengerjakan Bagian Category Entity + CRUD, Search & Filter, Dashboard //
+
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: header}">
+</head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Daftar Category</h2>
+        <a th:href="@{/categories/add}" class="btn btn-success">
+            + Tambah Category Baru
+        </a>
+    </div>
+
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${successMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${errorMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <p class="text-muted">
+        Total category: <strong th:text="${#lists.size(categories)}">0</strong>
+    </p>
+
+    <div th:if="${!#lists.isEmpty(categories)}">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+            <tr>
+                <th>No</th>
+                <th>Nama</th>
+                <th>Deskripsi</th>
+                <th>Aksi</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="cat, iterStat : ${categories}">
+                <td th:text="${iterStat.index + 1}">1</td>
+                <td th:text="${cat.name}">Nama</td>
+                <td th:text="${cat.description}">Deskripsi</td>
+                <td>
+                    <a th:href="@{/categories/edit/{id}(id=${cat.id})}" class="btn btn-warning btn-sm">Edit</a>
+                    <form th:action="@{/categories/delete/{id}(id=${cat.id})}" method="post" style="display:inline;"
+                          onsubmit="return confirm('Apakah Anda yakin ingin menghapus category ini?');">
+                        <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${#lists.isEmpty(categories)}" class="text-center py-5">
+        <p class="text-muted fs-5">Belum ada category.</p>
+        <a th:href="@{/categories/add}" class="btn btn-primary">Tambah Category Pertama</a>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

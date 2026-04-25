@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: header}">
+</head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container mt-4">
+    <h2 class="mb-4">Dashboard</h2>
+
+    <!-- Pesan jika belum ada produk -->
+    <div th:if="${totalProduk == 0}" class="alert alert-info text-center">
+        <p class="mb-1">Kamu belum memiliki produk.</p>
+        <a th:href="@{/products/new}" class="btn btn-primary btn-sm mt-2">+ Tambah Produk Pertama</a>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-4">
+
+        <!-- Total Produk -->
+        <div class="col-md-3">
+            <div class="card text-white bg-primary shadow">
+                <div class="card-body">
+                    <h6 class="card-title">Total Produk</h6>
+                    <h2 class="card-text" th:text="${totalProduk}">0</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Nilai Inventory -->
+        <div class="col-md-3">
+            <div class="card text-white bg-success shadow">
+                <div class="card-body">
+                    <h6 class="card-title">Total Nilai Inventory</h6>
+                    <h2 class="card-text" th:text="${'Rp ' + #numbers.formatDecimal(totalInventory, 0, 'POINT', 0, 'COMMA')}">Rp 0</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Produk Aktif -->
+        <div class="col-md-3">
+            <div class="card text-white bg-info shadow">
+                <div class="card-body">
+                    <h6 class="card-title">Produk Aktif</h6>
+                    <h2 class="card-text" th:text="${totalAktif}">0</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Produk Tidak Aktif -->
+        <div class="col-md-3">
+            <div class="card text-white bg-danger shadow">
+                <div class="card-body">
+                    <h6 class="card-title">Produk Tidak Aktif</h6>
+                    <h2 class="card-text" th:text="${totalTidakAktif}">0</h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Produk per Kategori & Low Stock -->
+    <div class="row g-4">
+
+        <!-- Produk per Kategori -->
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header table-dark text-white">
+                    <h5 class="mb-0">Jumlah Produk per Kategori</h5>
+                </div>
+                <div class="card-body">
+                    <div th:if="${produkPerKategori.isEmpty()}" class="text-muted">
+                        Belum ada data kategori.
+                    </div>
+                    <table th:if="${!produkPerKategori.isEmpty()}" class="table table-striped mb-0">
+                        <thead>
+                        <tr>
+                            <th>Kategori</th>
+                            <th>Jumlah Produk</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="entry : ${produkPerKategori}">
+                            <td th:text="${entry.key}">Kategori</td>
+                            <td th:text="${entry.value}">0</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Low Stock -->
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">⚠ Daftar Low Stock (stok &lt; 5)</h5>
+                </div>
+                <div class="card-body">
+                    <div th:if="${#lists.isEmpty(lowStockProducts)}" class="text-muted">
+                        Tidak ada produk dengan stok rendah.
+                    </div>
+                    <table th:if="${!#lists.isEmpty(lowStockProducts)}" class="table table-striped mb-0">
+                        <thead>
+                        <tr>
+                            <th>Nama Produk</th>
+                            <th>Kategori</th>
+                            <th>Stok</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="product : ${lowStockProducts}">
+                            <td th:text="${product.name}">Nama</td>
+                            <td th:text="${product.category?.name}">Kategori</td>
+                            <td>
+                                <span class="badge bg-danger" th:text="${product.stock}">0</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
