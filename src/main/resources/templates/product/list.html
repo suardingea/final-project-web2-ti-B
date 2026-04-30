@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: header}">
+</head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Daftar Produk</h2>
+        <a th:href="@{/products/new}" class="btn btn-success">
+            + Tambah Produk Baru
+        </a>
+    </div>
+
+    <!-- Flash Messages -->
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${successMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${errorMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <!-- Search & Filter -->
+    <form th:action="@{/products}" method="get" class="row g-2 mb-4">
+        <div class="col-md-5">
+            <input type="text" name="keyword" class="form-control"
+                   placeholder="Cari nama produk..."
+                   th:value="${keyword}">
+        </div>
+        <div class="col-md-4">
+            <select name="categoryId" class="form-select">
+                <option value="">-- Semua Kategori --</option>
+                <option th:each="cat : ${categories}"
+                        th:value="${cat.id}"
+                        th:text="${cat.name}"
+                        th:selected="${selectedCategoryId != null and selectedCategoryId == cat.id}">
+                </option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Cari</button>
+        </div>
+        <div class="col-md-1">
+            <a th:href="@{/products}" class="btn btn-secondary w-100">Reset</a>
+        </div>
+    </form>
+
+    <!-- Product Count -->
+    <p class="text-muted">
+        Total produk: <strong th:text="${#lists.size(products)}">0</strong>
+    </p>
+
+    <!-- Product Table -->
+    <div th:if="${!#lists.isEmpty(products)}">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+            <tr>
+                <th>No</th>
+                <th>Nama</th>
+                <th>Kategori</th>
+                <th>Harga</th>
+                <th>Stok</th>
+                <th>Status</th>
+                <th>Aksi</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product, iterStat : ${products}">
+                <td th:text="${iterStat.count}"></td>
+                <td th:text="${product.name}"></td>
+                <td th:text="${product.category != null ? product.category.name : '-'}"></td>
+
+                <!-- ✅ Bagian yang sudah difix ada di sini -->
+                <td th:text="${'Rp ' + #numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}"></td>
+
+                <td th:text="${product.stock}"></td>
+                <td>
+                    <span th:if="${product.stock > 0}" class="badge bg-success">Tersedia</span>
+                    <span th:if="${product.stock == 0}" class="badge bg-danger">Habis</span>
+                </td>
+                <td>
+                    <a th:href="@{/products/{id}(id=${product.id})}" class="btn btn-sm btn-info">Detail</a>
+                    <a th:href="@{/products/{id}/edit(id=${product.id})}" class="btn btn-sm btn-warning">Edit</a>
+                    <form th:action="@{/products/{id}/delete(id=${product.id})}" method="post" style="display:inline">
+                        <button type="submit" class="btn btn-sm btn-danger"
+                                onclick="return confirm('Yakin hapus produk ini?')">Hapus</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pesan jika tidak ada produk -->
+    <div th:if="${#lists.isEmpty(products)}" class="alert alert-warning text-center">
+        Tidak ada produk yang ditemukan.
+    </div>
+
+</div>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+// Thomas(2481011) mengerjakan bagian User Profil.
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: header}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <div class="card shadow">
+                <div class="card-header">
+                    <h4 class="mb-0">Edit Profil</h4>
+                </div>
+                <div class="card-body p-4">
+
+                    <!-- enctype multipart wajib untuk upload file -->
+                    <form th:action="@{/profile/edit}" th:object="${user}"
+                          method="post" enctype="multipart/form-data">
+
+                        <!-- Preview Foto Profil -->
+                        <div class="text-center mb-4">
+                            <img th:if="${user.profileImageUrl != null and !#strings.isEmpty(user.profileImageUrl)}"
+                                 th:src="${user.profileImageUrl}"
+                                 class="rounded-circle mb-2"
+                                 width="100" height="100"
+                                 style="object-fit: cover;"
+                                 alt="Foto Profil"
+                                 id="previewImage">
+                            <div th:unless="${user.profileImageUrl != null and !#strings.isEmpty(user.profileImageUrl)}"
+                                 class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center mb-2"
+                                 style="width:100px; height:100px; font-size:40px; color:white;"
+                                 id="previewPlaceholder">
+                                👤
+                            </div>
+                            <div>
+                                <label for="photoFile" class="form-label">Foto Profil</label>
+                                <input type="file" class="form-control" id="photoFile"
+                                       name="photoFile" accept="image/*"
+                                       onchange="previewPhoto(this)">
+                                <small class="text-muted">Format: JPG, PNG, GIF (maks. 2MB)</small>
+                            </div>
+                        </div>
+
+                        <!-- Full Name -->
+                        <div class="mb-3">
+                            <label class="form-label">Nama Lengkap</label>
+                            <input type="text" class="form-control"
+                                   th:field="*{fullName}"
+                                   placeholder="Masukkan nama lengkap">
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control"
+                                   th:field="*{email}"
+                                   placeholder="Masukkan email">
+                        </div>
+
+                        <!-- Phone Number -->
+                        <div class="mb-3">
+                            <label class="form-label">No. Telepon</label>
+                            <input type="text" class="form-control"
+                                   th:field="*{phoneNumber}"
+                                   placeholder="Masukkan nomor telepon">
+                        </div>
+
+                        <!-- Address -->
+                        <div class="mb-3">
+                            <label class="form-label">Alamat</label>
+                            <textarea class="form-control" rows="2"
+                                      th:field="*{address}"
+                                      placeholder="Masukkan alamat"></textarea>
+                        </div>
+
+                        <!-- Bio -->
+                        <div class="mb-3">
+                            <label class="form-label">Bio</label>
+                            <textarea class="form-control" rows="3"
+                                      th:field="*{bio}"
+                                      placeholder="Ceritakan sedikit tentang diri kamu"></textarea>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                            <a th:href="@{/profile}" class="btn btn-secondary">Batal</a>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+<!-- Script preview foto sebelum upload -->
+<script>
+    function previewPhoto(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                let img = document.getElementById('previewImage');
+                let placeholder = document.getElementById('previewPlaceholder');
+
+                if (img) {
+                    img.src = e.target.result;
+                } else if (placeholder) {
+                    placeholder.outerHTML = `<img id="previewImage" src="${e.target.result}"
+                        class="rounded-circle mb-2"
+                        width="100" height="100"
+                        style="object-fit: cover;"
+                        alt="Foto Profil">`;
+                }
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
+</body>
+</html>
