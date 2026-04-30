@@ -1,5 +1,4 @@
 package com.example.productcrud.service;
-// Thomas(2481011) mengerjakan bagian User Profil
 
 import com.example.productcrud.model.User;
 import com.example.productcrud.repository.UserRepository;
@@ -23,6 +22,5 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(
                         "User tidak ditemukan: " + username));
 
-        return new CustomUserDetails(user); // ← ganti ini
     }
 }

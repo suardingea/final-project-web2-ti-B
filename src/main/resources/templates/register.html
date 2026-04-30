@@ -19,42 +19,18 @@
                     <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
                     <form th:action="@{/register}" th:object="${registerRequest}" method="post">
-
-                        <!-- Username -->
                         <div class="mb-3">
-                            <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="username"
                                    th:field="*{username}" placeholder="Masukkan username" required autofocus>
                         </div>
-
-                        <!-- Full Name (opsional) -->
                         <div class="mb-3">
-                            <label for="fullName" class="form-label">Nama Lengkap <span class="text-muted">(opsional)</span></label>
-                            <input type="text" class="form-control" id="fullName"
-                                   th:field="*{fullName}" placeholder="Masukkan nama lengkap">
-                        </div>
-
-                        <!-- Email (opsional) -->
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email <span class="text-muted">(opsional)</span></label>
-                            <input type="email" class="form-control" id="email"
-                                   th:field="*{email}" placeholder="Masukkan email">
-                        </div>
-
-                        <!-- Password -->
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
                             <input type="password" class="form-control" id="password"
                                    th:field="*{password}" placeholder="Masukkan password" required>
                         </div>
-
-                        <!-- Konfirmasi Password -->
                         <div class="mb-3">
-                            <label for="confirmPassword" class="form-label">Konfirmasi Password <span class="text-danger">*</span></label>
                             <input type="password" class="form-control" id="confirmPassword"
                                    th:field="*{confirmPassword}" placeholder="Ulangi password" required>
                         </div>
-
                         <button type="submit" class="btn btn-success w-100">Daftar</button>
                     </form>
 

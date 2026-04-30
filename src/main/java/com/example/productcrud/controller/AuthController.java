@@ -60,19 +60,9 @@ public class AuthController {
             return "redirect:/register";
         }
 
-        // Simpan user baru
         User user = new User();
         user.setUsername(registerRequest.getUsername().trim());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-
-        // Simpan fullName dan email jika diisi
-        if (registerRequest.getFullName() != null && !registerRequest.getFullName().trim().isEmpty()) {
-            user.setFullName(registerRequest.getFullName().trim());
-        }
-        if (registerRequest.getEmail() != null && !registerRequest.getEmail().trim().isEmpty()) {
-            user.setEmail(registerRequest.getEmail().trim());
-        }
-
         userRepository.save(user);
 
         redirectAttributes.addFlashAttribute("success", "Registrasi berhasil! Silakan login.");
