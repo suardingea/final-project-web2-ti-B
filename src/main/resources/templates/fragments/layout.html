@@ -13,10 +13,22 @@
 </head>
 
 <!-- Navbar Fragment -->
-<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark mb-4"
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-primary mb-4"
      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <div class="container">
-        <a class="navbar-brand" th:href="@{/}">Product CRUD</a>
+
+        <!-- Logo UNAI + FTI -->
+        <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/}">
+            <img th:src="@{/images/fti-logo.png}"
+                 alt="Logo UNAI FTI"
+                 height="45"
+                 style="object-fit: contain;">
+            <div style="line-height: 1.2;">
+                <div style="font-size: 0.9rem; font-weight: 600;">Fakultas Teknologi Informasi</div>
+                <div style="font-size: 0.72rem; opacity: 0.75; font-weight: 400;">Universitas Advent Indonesia</div>
+            </div>
+        </a>
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
