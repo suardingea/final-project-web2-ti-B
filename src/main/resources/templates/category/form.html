@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+//Nama : Suardin Gea
+//Nim   : 2481006
+//Mengerjakan Bagian Category Entity + CRUD, Search & Filter, Dashboard //
+
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: header}">
+</head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm mt-4">
+                <div class="card-header table-dark text-white">
+                    <h4 class="mb-0" th:text="${category.id != null} ? 'Edit Category' : 'Tambah Category'">Form Category</h4>
+                </div>
+                <div class="card-body">
+                    <form th:action="${category.id != null} ? @{/categories/edit/{id}(id=${category.id})} : @{/categories/add}"
+                          th:object="${category}" method="post">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Nama Category</label>
+                            <input type="text" class="form-control" th:field="*{name}"
+                                   placeholder="Masukkan nama category" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Deskripsi</label>
+                            <textarea class="form-control" th:field="*{description}"
+                                      rows="3" placeholder="Masukkan deskripsi (opsional)"></textarea>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                            <a th:href="@{/categories}" class="btn btn-secondary">Batal</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

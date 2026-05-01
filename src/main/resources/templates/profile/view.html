@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!-- Thomas(2481011) mengerjakan bagian User Profil. -->
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: header}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <!-- Alert sukses -->
+            <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+            <div class="card shadow">
+                <div class="card-body text-center p-4">
+
+                    <!-- Foto Profil / Placeholder -->
+                    <div class="mb-3">
+                        <img th:if="${user.profileImageUrl != null and !#strings.isEmpty(user.profileImageUrl)}"
+                             th:src="${user.profileImageUrl}"
+                             class="rounded-circle"
+                             width="120" height="120"
+                             style="object-fit: cover;"
+                             alt="Profile Image">
+                        <div th:unless="${user.profileImageUrl != null and !#strings.isEmpty(user.profileImageUrl)}"
+                             class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center"
+                             style="width:120px; height:120px; font-size:48px; color:white;">
+                            👤
+                        </div>
+                    </div>
+
+                    <!-- Info User -->
+                    <h4 th:text="${user.fullName != null} ? ${user.fullName} : ${user.username}">Nama User</h4>
+                    <p class="text-muted" th:text="'@' + ${user.username}">@username</p>
+
+                    <hr>
+
+                    <div class="text-start">
+                        <div class="mb-2">
+                            <strong>Email:</strong>
+                            <span th:text="${user.email != null} ? ${user.email} : '-'">-</span>
+                        </div>
+                        <div class="mb-2">
+                            <strong>No. Telepon:</strong>
+                            <span th:text="${user.phoneNumber != null} ? ${user.phoneNumber} : '-'">-</span>
+                        </div>
+                        <div class="mb-2">
+                            <strong>Alamat:</strong>
+                            <span th:text="${user.address != null} ? ${user.address} : '-'">-</span>
+                        </div>
+                        <div class="mb-2">
+                            <strong>Bio:</strong>
+                            <span th:text="${user.bio != null} ? ${user.bio} : '-'">-</span>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <a th:href="@{/profile/edit}" class="btn btn-primary">Edit Profil</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
