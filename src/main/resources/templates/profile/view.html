@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<!-- Thomas(2481011) mengerjakan bagian User Profil. -->
-
+//Thomas(2481011) mengerjakan bagian User Profil//
+//Jessica Mengerjakan Fitur Change Password//
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: header}"></head>
 <body>
@@ -58,7 +58,12 @@
 
                     <hr>
 
-                    <a th:href="@{/profile/edit}" class="btn btn-primary">Edit Profil</a>
+                    <!-- Tombol -->
+                    <div class="d-flex justify-content-center gap-2">
+                        <a th:href="@{/profile/edit}" class="btn btn-primary">Edit Profil</a>
+                        <a th:href="@{/change-password}" class="btn btn-outline-secondary">Ganti Password</a>
+                    </div>
+
                 </div>
             </div>
 
