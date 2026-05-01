@@ -5,6 +5,7 @@ package com.example.productcrud.controller;
 import com.example.productcrud.model.User;
 import com.example.productcrud.repository.UserRepository;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,10 +25,12 @@ import java.util.UUID;
 public class ProfileController {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     private final String uploadDir = "uploads/";
 
-    public ProfileController(UserRepository userRepository) {
+    public ProfileController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @ModelAttribute("currentUser")
@@ -92,6 +95,39 @@ public class ProfileController {
 
         userRepository.save(user);
         redirectAttributes.addFlashAttribute("success", "Profil berhasil diperbarui!");
+        return "redirect:/profile";
+    }
+
+    @GetMapping("/profile/change-password")
+    public String changePasswordForm() {
+        return "profile/change-password";
+    }
+
+    @PostMapping("/profile/change-password")
+    public String changePassword(@RequestParam String oldPassword,
+                                 @RequestParam String newPassword,
+                                 @RequestParam String confirmPassword,
+                                 Authentication authentication,
+                                 RedirectAttributes redirectAttributes) {
+
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User tidak ditemukan"));
+
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            redirectAttributes.addFlashAttribute("error", "Password lama salah!");
+            return "redirect:/profile/change-password";
+        }
+
+        if (!newPassword.equals(confirmPassword)) {
+            redirectAttributes.addFlashAttribute("error", "Konfirmasi password tidak cocok!");
+            return "redirect:/profile/change-password";
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        redirectAttributes.addFlashAttribute("success", "Password berhasil diubah!");
         return "redirect:/profile";
     }
 }
