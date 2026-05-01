@@ -1,5 +1,6 @@
-// Thomas(2481011) mengerjakan User Profil
 package com.example.productcrud.controller;
+
+// Thomas(2481011) mengerjakan bagian User Profil
 
 import com.example.productcrud.model.User;
 import com.example.productcrud.repository.UserRepository;
@@ -27,6 +28,12 @@ public class ProfileController {
 
     public ProfileController(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @ModelAttribute("currentUser")
+    public User getCurrentUser(Authentication authentication) {
+        if (authentication == null) return null;
+        return userRepository.findByUsername(authentication.getName()).orElse(null);
     }
 
     @GetMapping("/profile")

@@ -22,5 +22,6 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(
                         "User tidak ditemukan: " + username));
 
+        return new CustomUserDetails(user);
     }
 }
